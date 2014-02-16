@@ -52,19 +52,23 @@ define(function (require, exports) {
     function statusPassed(message) {
         StatusBar.updateIndicator("XUNIT", true, "xunit-failed", 'Failed');
         $("#XUNIT").text(message);
+        //alert(message);
     }
     function statusFailed(message) {
         StatusBar.updateIndicator("XUNIT", true, "xunit-complete", 'Complete');
         $("#XUNIT").text(message);
+        //alert(message);
     }
     function statusRunning(message) {
         message = message || "running";
         StatusBar.updateIndicator("XUNIT", true, "xunit-process", 'Running');
         $("#XUNIT").text(message);
+        //alert(message);
     }
     function statusCoverage(message) {
         StatusBar.updateIndicator("XUNITCOVERAGE", true, "xunit-complete", 'Complete');
         $("#XUNITCOVERAGE").text(message);
+        //alert(message);
     }
     
     
@@ -76,8 +80,8 @@ define(function (require, exports) {
         
         var xunitStatusHtml = $("<div id=\"xunit-status\" title=\"No xunit errors\">No tests</div>", {}),
             xunitCoverageHtml = $("<div id=\"xunit-coverage\" title=\"No coverage\">No coverage</div>", {});
-        $(xunitStatusHtml).insertBefore("#jslint-status");
-        $(xunitCoverageHtml).insertBefore("#jslint-status");
+        $(xunitStatusHtml).appendTo("#status-indicators");
+        $(xunitCoverageHtml).appendTo("#status-indicators");
         StatusBar.addIndicator("XUNIT", $("#xunit-status"));
         StatusBar.addIndicator("XUNITCOVERAGE", $("#xunit-coverage"));
         StatusBar.updateIndicator("XUNIT", true, "xunit-disabled", 'Xunit');
