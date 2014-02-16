@@ -37,7 +37,7 @@ define(function (require, exports) {
             var dfd = new $.Deferred();
             require([readPath], function (text) {
                 dfd.resolve(text);
-            });  
+            });
             return dfd.promise();
         },
         copyFile = function (readPath, directory, data) {
@@ -48,13 +48,13 @@ define(function (require, exports) {
                 contents;
             
             me.getFileContents(readPath)
-                .then(function(text) {
+                .then(function (text) {
                     contents = text;
-                    if(data) {
+                    if (data) {
                         contents = Mustache.render(contents, data);
                     }
                     return FileUtils.writeText(writeFile, contents);
-                }).done(function() {
+                }).done(function () {
                     dfd.resolve(contents);
                 });
             
@@ -89,7 +89,7 @@ define(function (require, exports) {
                 var includedata = includestr.split(',');
                 var i;
                 for (i = 0; i < includedata.length; i++) {
-                    var includeFile = includedata[i],
+                    var includeFile = includedata[i].trim(),
                         codeCoverage = '',
                         cacheBuster = cache ? '?u=' + cache : '';
                     if (includeFile[includeFile.length - 1] === "*") {

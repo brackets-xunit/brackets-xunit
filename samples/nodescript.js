@@ -3,3 +3,4 @@
 
 console.log("running a node script");
 console.log("args: "+process.argv);
+

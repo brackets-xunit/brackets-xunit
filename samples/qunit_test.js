@@ -13,7 +13,7 @@ test( "My Third Test", function() {
 });
 
 test( "My Third Test", function() {
-    ok( 4 == "3", "Still fuzzy" );
+    ok( 4 == "4", "Still fuzzy" );
 });
 
 

@@ -76,35 +76,6 @@ define(function (require, exports, module) {
         );
     }
  
-    /* finds the brackets-xunit: includes= strings contained in a test
-     * parameters: contents dir
-     *    contents = string of the entire test
-     *    dirPath = the base directory
-     * returns: string of <script src="dir+path"/>
-     */
-    function parseIncludes(contents, dirPath, cache) {
-        var includes = '';
-        if (contents && contents.match(/brackets-xunit:\s*includes=/)) {
-            var includestr = contents.match(/brackets-xunit:\s*includes=[A-Za-z0-9,\._\-\/\*]*/)[0];
-            includestr = includestr.substring(includestr.indexOf('=') + 1);
-            
-            var includedata = includestr.split(',');
-            var i;
-            for (i = 0; i < includedata.length; i++) {
-                var includeFile = includedata[i],
-                    codeCoverage = '',
-                    cacheBuster = cache ? '?u=' + cache : '';
-                if (includeFile[includeFile.length - 1] === "*") {
-                    includeFile = includeFile.substring(0, includeFile.length - 1);
-                    codeCoverage = ' data-cover';
-                    //cacheBuster = '';
-                }
-                includes = includes + '<script src="' + dirPath + includeFile + cacheBuster + '"' + codeCoverage + '></script>\n';
-            }
-        }
-        return includes;
-    }
-
     // chain: connects multiple function calls together,  the functions must return Deferred objects
     function chain() {
         var functions = Array.prototype.slice.call(arguments, 0);
@@ -120,8 +91,13 @@ define(function (require, exports, module) {
     function runYUI() {
         yuiRunner.run();
     }
- 
-    // Execute Jasmine test
+
+    // Runs a QUnit test
+    function runQUnit() {
+        qunitRunner.run();
+    }
+    
+     // Execute Jasmine test
     function runJasmine() {
         jasmineRunner.run();
        
@@ -145,12 +121,6 @@ define(function (require, exports, module) {
                 );
             });
     }
-
-    // Runs a QUnit test
-    function runQUnit() {
-        qunitRunner.run();
-    }
-    
     // opens an html file in a new window
     function viewHtml() {
         var entry = ProjectManager.getSelectedItem();
@@ -179,7 +149,7 @@ define(function (require, exports, module) {
             
         if (argsmatch !== null && argsmatch.length > 0) {
             argsstr = argsmatch[0].substring(argsmatch[0].indexOf("=") + 1);
-            args = argsstr.split(',');
+            args = argsstr.split(',').trim();
             argsout = '';
             var i;
             for (i = 0; i < args.length; i++) {
@@ -789,7 +759,6 @@ define(function (require, exports, module) {
     exports.formatTime = formatTime;
     exports.checkFileTypes = checkFileTypes;
     exports.determineFileType = determineFileType;
-    exports.parseIncludes = parseIncludes;
 });
 
 

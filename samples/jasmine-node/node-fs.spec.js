@@ -11,6 +11,7 @@ var domainapi = require("./node-fs.js"),
 describe("test readConfig()", function () {
     "use strict";
     results = domainapi.readConfig();
+    
     it("readConfig() === brackets-xUnit jasmine-node test", function () {
         expect(results).toEqual('brackets-xUnit jasmine-node test');
     });
