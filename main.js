@@ -1,24 +1,24 @@
 /*
  * Copyright (c) 2013 Adobe Systems Incorporated. All rights reserved.
- *  
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a
- * copy of this software and associated documentation files (the "Software"), 
- * to deal in the Software without restriction, including without limitation 
- * the rights to use, copy, modify, merge, publish, distribute, sublicense, 
- * and/or sell copies of the Software, and to permit persons to whom the 
+ * copy of this software and associated documentation files (the "Software"),
+ * to deal in the Software without restriction, including without limitation
+ * the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ * and/or sell copies of the Software, and to permit persons to whom the
  * Software is furnished to do so, subject to the following conditions:
- *  
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- *  
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER 
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING 
- * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
- * 
+ *
  * brackets-xunit - a brackets extension to run various unit test frameworks
  */
 
@@ -26,7 +26,7 @@
 /*global brackets, define, $, window, Mustache */
 define(function (require, exports, module) {
     'use strict';
-    
+
     var AppInit             = brackets.getModule("utils/AppInit"),
         CommandManager      = brackets.getModule("command/CommandManager"),
         Dialogs             = brackets.getModule("widgets/Dialogs"),
@@ -35,7 +35,7 @@ define(function (require, exports, module) {
         Menus               = brackets.getModule("command/Menus"),
         FileSystem          = brackets.getModule("filesystem/FileSystem"),
         LanguageManager     = brackets.getModule("language/LanguageManager"),
-        
+
         NodeConnection      = brackets.getModule("utils/NodeConnection"),
         DocumentManager     = brackets.getModule("document/DocumentManager"),
         ProjectManager      = brackets.getModule("project/ProjectManager"),
@@ -62,10 +62,10 @@ define(function (require, exports, module) {
         nodeConnection      = new NodeConnection(),
         _windows            = {},
         enableHtml          = false;
-   
-    
+
+
     /* display a modal dialog
-     * title: string  
+     * title: string
      * message: string
      */
     function showError(title, message) {
@@ -75,7 +75,7 @@ define(function (require, exports, module) {
             message
         );
     }
- 
+
     /* finds the brackets-xunit: includes= strings contained in a test
      * parameters: contents dir
      *    contents = string of the entire test
@@ -87,7 +87,7 @@ define(function (require, exports, module) {
         if (contents && contents.match(/brackets-xunit:\s*includes=/)) {
             var includestr = contents.match(/brackets-xunit:\s*includes=[A-Za-z0-9,\._\-\/\*]*/)[0];
             includestr = includestr.substring(includestr.indexOf('=') + 1);
-            
+
             var includedata = includestr.split(',');
             var i;
             for (i = 0; i < includedata.length; i++) {
@@ -120,13 +120,13 @@ define(function (require, exports, module) {
     function runYUI() {
         yuiRunner.run();
     }
- 
+
     // Execute Jasmine test
     function runJasmine() {
         jasmineRunner.run();
-       
+
     }
-    
+
     // Run jasmine-node test, call to node server
     //    when finishes the jasmine.update event is called
     function runJasmineNode() {
@@ -150,7 +150,7 @@ define(function (require, exports, module) {
     function runQUnit() {
         qunitRunner.run();
     }
-    
+
     // opens an html file in a new window
     function viewHtml() {
         var entry = ProjectManager.getSelectedItem();
@@ -161,7 +161,7 @@ define(function (require, exports, module) {
         var w = window.open(path);
         w.focus();
     }
-    
+
     // Run a current file as a shell script using node process spawn
     // results are returned as the script runs from process.stdout, process.stderr
     // when the script finishes the exit code is returned from the event process.exit
@@ -176,7 +176,7 @@ define(function (require, exports, module) {
             argsmatch = text.match(/brackets-xunit:\s*args=\S+/),
             argsstr = '',
             argsout = '';
-            
+
         if (argsmatch !== null && argsmatch.length > 0) {
             argsstr = argsmatch[0].substring(argsmatch[0].indexOf("=") + 1);
             args = argsstr.split(',');
@@ -199,7 +199,7 @@ define(function (require, exports, module) {
 
     // parses the current javascript document
     // an array containing function name and parameters are returned
-    // returns: array of objects { name, params } 
+    // returns: array of objects { name, params }
     //          params is an array of strings containing parameter names
     function parseCurrentDocument() {
         var text = DocumentManager.getCurrentDocument().getText();
@@ -230,8 +230,8 @@ define(function (require, exports, module) {
                     return;
                 }
 
-                
-                
+
+
                 //check this name
                 var callback = function (error) {
                     if (error) {
@@ -242,7 +242,7 @@ define(function (require, exports, module) {
                         result.notify(baseFileName + "-" + nextIndexToUse + fileExt, nextIndexToUse + 1);
                     }
                 };
-            
+
                 if (isFolder) {
                     FileSystem.resolve(
                         suggestedName,
@@ -277,7 +277,7 @@ define(function (require, exports, module) {
         deferred.done(createWithSuggestedName);
         return deferred;
     }
-    
+
     // returns a global object per test type to pass jslint
     function generateGlobalDeclaration(type, test, functions) {
         var fnames = '', i;
@@ -309,7 +309,7 @@ define(function (require, exports, module) {
             i,
             j,
             fparamstr;
-        
+
         if (functions.length === 0) {
             showError("Generate Jasmine Test", "Warning: The file " + filename + " does not have any methods to test.");
             return;
@@ -363,7 +363,7 @@ define(function (require, exports, module) {
         }
         createNewFile(fullpath, test, ".spec");
     }
-    
+
     function generateQunitTest() {
         var functions = parseCurrentDocument(),
             filename = DocumentManager.getCurrentDocument().file.name,
@@ -371,7 +371,7 @@ define(function (require, exports, module) {
             j,
             fparamstr,
             fullpath = DocumentManager.getCurrentDocument().file.fullPath;
-        
+
         if (functions.length === 0) {
             showError("Generate Qunit Test", "Warning: The file " + filename + " does not have any methods to test.");
             return;
@@ -407,7 +407,7 @@ define(function (require, exports, module) {
             j,
             fparamstr,
             fullpath = DocumentManager.getCurrentDocument().file.fullPath;
-        
+
         if (functions.length === 0) {
             showError("Generate YUI Test", "Warning: The file " + filename + " does not have any methods to test.");
             return;
@@ -421,8 +421,8 @@ define(function (require, exports, module) {
                    "    'use strict';\n" +
                    '    var testCase = new Y.Test.Case({\n' +
                    '        name: " test ' + filename + ' functions",\n';
-                    
-        
+
+
         for (i = 0; i < functions.length; i++) {
             fparamstr = '';
             for (j = 0; j < functions[i].params.length; j++) {
@@ -481,8 +481,8 @@ define(function (require, exports, module) {
         return result;
     }
 
-    
-    // reads config.js to determine if brackets-xunit should be disabled for the current project     
+
+    // reads config.js to determine if brackets-xunit should be disabled for the current project
     function readConfig() {
         var result = new $.Deferred();
         var root = ProjectManager.getProjectRoot(),
@@ -503,7 +503,7 @@ define(function (require, exports, module) {
         });
         return result.promise();
     }
-    
+
     // determine if a file is a known test type
     // first look for brackets-xunit: [type], takes precedence
     // next look for distinguishing clues in the file:
@@ -581,7 +581,7 @@ define(function (require, exports, module) {
     }
     // setup, connects to the node server loads node/JasmineDomain and node/ProcessDomain
     AppInit.appReady(function () {
-        
+
          /*Globals for passing objects from run windows*/
         window.reportComplete = function (result) {
             if (result.status === "failed") {
@@ -591,28 +591,28 @@ define(function (require, exports, module) {
                 MyStatusBar.statusPassed(result.message);
             }
         };
-        
+
         window.reportUpdate = function (result) {
             console.log("update", result);
             MyStatusBar.statusRunning(result.message);
         };
-        
+
         window.coverageComplete = function (result) {
             MyStatusBar.statusCoverage(result.message);
         };
-        
-        
+
+
         function runTestsOnSaveOrChange(document) {
-                
-                
+
+
             var language = document ? LanguageManager.getLanguageForPath(document.file.fullPath) : "";
             if (language && language.getId() === "javascript") {
-                
+
                 var selectedEntry = document.file,
                     text = document.getText(),
                     type;
                 readConfig().done(function () {
-                    
+
                     type = determineFileType(selectedEntry, text);
                     if (type === "yui") {
                         $("#status-language").text("Javascript+YUI");
@@ -623,25 +623,27 @@ define(function (require, exports, module) {
                     } else if (type === "qunit") {
                         $("#status-language").text("Javascript+QUnit");
                         runQUnit();
+                    } else if (type === "node") {
+                        $("#status-language").text("Node+Jasmine");
+                        runJasmineNode();
                     }
-                    
                 });
             }
         }
-        
+
         $(DocumentManager)
             .on("documentSaved.xunit", function (e, d) {
                 runTestsOnSaveOrChange(d);
             });
-       
-    
+
+
         $(DocumentManager)
             .on("currentDocumentChange", function () {
                 runTestsOnSaveOrChange(DocumentManager.getCurrentDocument());
             });
-        
+
         MyStatusBar.initializePanel();
-        
+
         nodeConnection = new NodeConnection();
         function connect() {
             var connectionPromise = nodeConnection.connect(true);
@@ -671,7 +673,7 @@ define(function (require, exports, module) {
                 FileUtils.readAsText(templateFile).done(function (text) {
 
                     jsondata = jsondata.replace(/'/g, "");
-                    
+
                     var jdata = JSON.parse(jsondata);
                     var totaltime = 0;
                     var i;
@@ -695,7 +697,7 @@ define(function (require, exports, module) {
             return loadPromise;
         }
 
-            
+
         $(nodeConnection).on("process.stdout", function (event, result) {
             var pid = result.pid,
                 data = result.data;
@@ -711,7 +713,7 @@ define(function (require, exports, module) {
                 _window.document.getElementById("time").innerHTML = formatTime(elapsed);
             }
         });
-                
+
         $(nodeConnection).on("process.stderr", function (event, result) {
             var pid = result.pid,
                 data = result.data;
@@ -748,7 +750,7 @@ define(function (require, exports, module) {
         chain(connect, loadJasmineDomain, loadProcessDomain);
     });
 
-   
+
 
 
     // Register commands as right click menu items
@@ -776,7 +778,7 @@ define(function (require, exports, module) {
             checkFileTypes(projectMenu, selectedEntry, text);
         });
     });
-    
+
     // check if the extension should add a menu item to the workingset menu (under Working Files, left panel)
     $(workingsetMenu).on("beforeContextMenuOpen", function () {
         var selectedEntry = DocumentManager.getCurrentDocument().file,
