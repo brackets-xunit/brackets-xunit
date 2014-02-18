@@ -1,4 +1,4 @@
-describe("The first suite", function () {
+/*describe("The first suite", function () {
     it("1st testcase should be green", function () {
         expect(true).toBe(true);
     });
@@ -25,11 +25,18 @@ describe("The fourth suite", function () {
 
 describe("The fither suite", function () {
     it("3rd testcase", function () {
-        expect(false).toBe(true);
+        expect(false).toBe(false);
     });
 });
-
-
+*/
+function helloWorld() {
+    return "Hello";   
+}
+describe("Hello world", function () {
+    it("says hello", function () {
+        expect(helloWorld()).toBe("Hi");
+    });
+});
 
 
 

@@ -16,7 +16,7 @@ define(function (require, exports) {
                     DocumentManager.getCurrentDocument().getText(),
                 fileInfo = FileProxy.getTestFileInfo(entry, contents),
                 includes = FileProxy.parseIncludes(fileInfo.contents, fileInfo.originalPath, new Date().getTime()),
-                useCodeCoverage = true,
+                useCodeCoverage = false,
                 data = {
                     filename : entry.name,
                     jasmineTest : "jasmine-test",

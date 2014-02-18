@@ -14,4 +14,10 @@ describe("test readConfig()", function () {
     it("readConfig() === brackets-xUnit jasmine-node test", function () {
         expect(results).toEqual('brackets-xUnit jasmine-node test');
     });
+    
+    it("Broken", function () {
+        expect(true).toEqual(false);
+    });
+    
+
 });
