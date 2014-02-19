@@ -42,6 +42,7 @@ define(function (require, exports, module) {
         qunitRunner         = require("main_qunit"),
         jasmineRunner       = require("main_jasmine"),
         jasmineNodeRunner   = require("main_jasmine_node"),
+        nodeRunner          = require("main_node"),
         yuiRunner           = require("main_yui"),
         MyStatusBar         = require("MyStatusBar");
 
@@ -120,20 +121,6 @@ define(function (require, exports, module) {
     //    when finishes the jasmine.update event is called
     function runJasmineNode() {
         jasmineNodeRunner.run();
-        /*var entry = ProjectManager.getSelectedItem();
-        if (entry === undefined) {
-            entry = DocumentManager.getCurrentDocument().file;
-        }
-        var path = entry.fullPath;
-        nodeConnection.domains.jasmine.runTest(path)
-            .fail(function (err) {
-                console.log("[brackets-jasmine] error running file: " + entry.fullPath + " message: " + err.toString());
-                Dialogs.showModalDialog(
-                    Dialogs.DIALOG_ID_ERROR,
-                    "Jasmine Error",
-                    "The test file contained an error: " + err.toString()
-                );
-            });*/
     }
 
     // Runs a QUnit test
@@ -156,35 +143,7 @@ define(function (require, exports, module) {
     // results are returned as the script runs from process.stdout, process.stderr
     // when the script finishes the exit code is returned from the event process.exit
     function runScript() {
-        var entry = ProjectManager.getSelectedItem();
-        if (entry === undefined) {
-            entry = DocumentManager.getCurrentDocument().file;
-        }
-        var path = entry.fullPath,
-            args = [],
-            text = DocumentManager.getCurrentDocument().getText(),
-            argsmatch = text.match(/brackets-xunit:\s*args=\S+/),
-            argsstr = '',
-            argsout = '';
-
-        if (argsmatch !== null && argsmatch.length > 0) {
-            argsstr = argsmatch[0].substring(argsmatch[0].indexOf("=") + 1);
-            args = argsstr.split(',');
-            argsout = '';
-            var i;
-            for (i = 0; i < args.length; i++) {
-                argsout = argsout + args[i] + " ";
-            }
-        }
-        nodeConnection.domains.process.spawnSession({executable: path, args: args, cacheTime: 100}).done(function (status) {
-            var template = require("text!templates/process.html"),
-                html = Mustache.render(template, { path: path, title: "script - " + path, args: argsout}),
-                newWindow = window.open("about:blank", null, "width=600,height=200");
-            newWindow.document.write(html);
-            newWindow.document.getElementById("exitcode").innerHTML = "running with pid " + status.pid;
-            newWindow.focus();
-            _windows[status.pid] = {window: newWindow, startTime: new Date(), type: "script"};
-        });
+        nodeRunner.run();
     }
 
     // parses the current javascript document

@@ -37,56 +37,6 @@ define(function (require, exports, module) {
             
             
             
-            /*var entry = ProjectManager.getSelectedItem() || DocumentManager.getCurrentDocument().file,
-                contents = //If .getText() is depricated we will have to read the file - entry.read(callback)
-                    DocumentManager.getCurrentDocument().getText(),
-                fileInfo = FileProxy.getTestFileInfo(entry, contents),
-                includes = FileProxy.parseIncludes(fileInfo.contents, fileInfo.originalPath, new Date().getTime()),
-                useCodeCoverage = false,
-                data = {
-                    filename : entry.name,
-                    jasmineTest : "jasmine-test",
-                    title : 'Jasmine test - ' + entry.name,
-                    includes : includes,
-                    contents : DocumentManager.getCurrentDocument().getText(),
-                    coverage : useCodeCoverage ? "<script src='jasmine.blanket.js'></script>" : ""
-                },
-                htmlFile = data.contents.match(/define\(/) ?
-                        "jasmine_requirejs.html" :
-                        "jasmine.html",
-                apiFilePath = contents.match(/require\('\.\/[A-Za-z0-9\-]+\.js/);
-            
-            
-            
-            $.when(
-                FileProxy.createDirectory(fileInfo.testPath)
-            ).then(function () {
-                var dfd = new $.Deferred();
-                if (apiFilePath) {
-                    dfd.then(FileProxy.copyFile(fileInfo.originalPath + apiFilePath, fileInfo.testPath));
-                }
-                dfd.resolve();
-                return dfd.promise();
-            }).then(function () {
-                return $.when(
-                  
-                    FileProxy.copyFile("text!templates/jasmine/" + htmlFile, fileInfo.testPath, data),
-                    FileProxy.copyFile("text!templates/jasmine/jasmine.css", fileInfo.testPath),
-                    FileProxy.copyFile("text!templates/jasmine/jquery.js", fileInfo.testPath),
-                    FileProxy.copyFile("text!templates/jasmine/jasmine.js", fileInfo.testPath),
-                    FileProxy.copyFile("text!templates/jasmine/jasmineCompleteReporter.js", fileInfo.testPath),
-                    FileProxy.copyFile("text!templates/jasmine/jasmine-html.js", fileInfo.testPath),
-                    FileProxy.copyFile("text!templates/jasmine/jasmine.blanket.js", fileInfo.testPath),
-                    FileProxy.copyFile("text!node/node_modules/jasmine-node/node_modules/requirejs/require.js", fileInfo.testPath)
-
-                ).promise();
-                
-            }).done(function () {
-                var urlToReport = fileInfo.testPath + "/" + htmlFile + (useCodeCoverage ? "?coverage=true" : "");
-                MyStatusBar.setReportWindow(urlToReport);
-            });*/
-            
-            
         };
     
     /* display a modal dialog
@@ -157,14 +107,6 @@ define(function (require, exports, module) {
             return loadPromise;
         }
 
-        function loadProcessDomain() {
-            var path = ExtensionUtils.getModulePath(module, "node/ProcessDomain");
-            var loadPromise = nodeConnection.loadDomains([path], true);
-            loadPromise.fail(function () {
-                console.log("[brackets-xunit] failed to load process domain");
-            });
-            return loadPromise;
-        }
         // chain: connects multiple function calls together,  the functions must return Deferred objects
         function chain() {
             var functions = Array.prototype.slice.call(arguments, 0);
@@ -202,56 +144,8 @@ define(function (require, exports, module) {
             }
         });
 
-        $(nodeConnection).on("process.stdout", function (event, result) {
-            var pid = result.pid,
-                data = result.data;
-            data = data.replace(/\r\n/g, '<br>').replace(/\n/g, '<br>');
-            if (_windows.hasOwnProperty(pid) === false) {
-                showError("Process Error", "there is no window with pid=" + pid);
-            } else {
-                var _window = _windows[pid].window,
-                    _time = _windows[pid].startTime,
-                    elapsed = new Date() - _time;
-                _window.document.getElementById("stdout-section").style.display = "block";
-                _window.document.getElementById("stdout").innerHTML += data;
-                _window.document.getElementById("time").innerHTML = formatTime(elapsed);
-            }
-        });
-
-        $(nodeConnection).on("process.stderr", function (event, result) {
-            var pid = result.pid,
-                data = result.data;
-            data = data.replace(/\r\n/g, '<br>').replace(/\n/g, '<br>');
-            if (_windows.hasOwnProperty(pid) === false) {
-                showError("Process Error", "there is no window with pid=" + pid);
-            } else {
-                var _window = _windows[pid].window,
-                    _time = _windows[pid].startTime,
-                    elapsed = new Date() - _time;
-                _window.document.getElementById("stderr-section").style.display = "block";
-                _window.document.getElementById("stderr").innerHTML += data;
-                _window.document.getElementById("time").innerHTML = formatTime(elapsed);
-            }
-        });
-
-        $(nodeConnection).on("process.exit", function (event, result) {
-            var pid = result.pid,
-                data = result.data;
-            data = data.replace(/\n/g, '<br>');
-            if (_windows.hasOwnProperty(pid) === false) {
-                showError("Process Error", "there is no window with pid=" + pid);
-            } else {
-                var _window = _windows[pid].window,
-                    _time = _windows[pid].startTime,
-                    elapsed = new Date() - _time,
-                    code = result.exitcode;
-                _window.document.getElementById("stdout-section").style.display = "block";
-                _window.document.getElementById("stdout").innerHTML += data;
-                _window.document.getElementById("exitcode").innerHTML = "finished with exit code " + code;
-                _window.document.getElementById("time").innerHTML = formatTime(elapsed);
-            }
-        });
-        chain(connect, loadJasmineDomain, loadProcessDomain);
+        
+        chain(connect, loadJasmineDomain);
     }());
     
     exports.run = run;
