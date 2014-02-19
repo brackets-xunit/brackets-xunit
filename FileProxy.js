@@ -81,7 +81,12 @@ define(function (require, exports) {
             return dfd.promise();
         },
         parseIncludes = function (contents, dirPath, cache) {
-            var includes = '';
+            var includes = '',
+                results = {
+                    html: "",
+                    files: [],
+                    codeCoverage: false
+                };
             if (contents && contents.match(/brackets-xunit:\s*includes=/)) {
                 var includestr = contents.match(/brackets-xunit:\s*includes=[A-Za-z0-9,\._\-\/\*]*/)[0];
                 includestr = includestr.substring(includestr.indexOf('=') + 1);
@@ -91,16 +96,24 @@ define(function (require, exports) {
                 for (i = 0; i < includedata.length; i++) {
                     var includeFile = includedata[i],
                         codeCoverage = '',
-                        cacheBuster = cache ? '?u=' + cache : '';
+                        cacheBuster = cache ? '?u=' + cache : '',
+                        file;
                     if (includeFile[includeFile.length - 1] === "*") {
                         includeFile = includeFile.substring(0, includeFile.length - 1);
                         codeCoverage = ' data-cover';
+                        results.codeCoverage = true;
                         //cacheBuster = '';
                     }
-                    includes = includes + '<script src="' + dirPath + includeFile + cacheBuster + '"' + codeCoverage + '></script>\n';
+                    file = { 
+                        path: dirPath + includeFile + cacheBuster,
+                        coverage: codeCoverage ? true : false
+                    };
+                    results.files.push(file);
+                    includes = includes + '<script src="' + file.path + '"' + codeCoverage + '></script>\n';
                 }
             }
-            return includes;
+            results.html = includes;
+            return results;
         };
     exports.getFileName = getFileName;
     exports.getFileContents = getFileContents;

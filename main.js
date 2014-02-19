@@ -76,34 +76,7 @@ define(function (require, exports, module) {
         );
     }
 
-    /* finds the brackets-xunit: includes= strings contained in a test
-     * parameters: contents dir
-     *    contents = string of the entire test
-     *    dirPath = the base directory
-     * returns: string of <script src="dir+path"/>
-     */
-    function parseIncludes(contents, dirPath, cache) {
-        var includes = '';
-        if (contents && contents.match(/brackets-xunit:\s*includes=/)) {
-            var includestr = contents.match(/brackets-xunit:\s*includes=[A-Za-z0-9,\._\-\/\*]*/)[0];
-            includestr = includestr.substring(includestr.indexOf('=') + 1);
-
-            var includedata = includestr.split(',');
-            var i;
-            for (i = 0; i < includedata.length; i++) {
-                var includeFile = includedata[i],
-                    codeCoverage = '',
-                    cacheBuster = cache ? '?u=' + cache : '';
-                if (includeFile[includeFile.length - 1] === "*") {
-                    includeFile = includeFile.substring(0, includeFile.length - 1);
-                    codeCoverage = ' data-cover';
-                    //cacheBuster = '';
-                }
-                includes = includes + '<script src="' + dirPath + includeFile + cacheBuster + '"' + codeCoverage + '></script>\n';
-            }
-        }
-        return includes;
-    }
+  
 
     
     // Execute YUI test
@@ -636,7 +609,6 @@ define(function (require, exports, module) {
     exports.formatTime = formatTime;
     exports.checkFileTypes = checkFileTypes;
     exports.determineFileType = determineFileType;
-    exports.parseIncludes = parseIncludes;
 });
 
 

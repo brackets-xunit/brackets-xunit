@@ -16,11 +16,11 @@ define(function (require, exports, module) {
                     DocumentManager.getCurrentDocument().getText(),
                 fileInfo = FileProxy.getTestFileInfo(entry, contents),
                 includes = FileProxy.parseIncludes(fileInfo.contents, fileInfo.originalPath, new Date().getTime()),
-                useCodeCoverage = true,
+                useCodeCoverage = includes.codeCoverage,
                 data = {
                     filename : entry.name,
                     title : 'QUnit test - ' + entry.name,
-                    includes : includes + "<script src='qunit.js'></script>",
+                    includes : includes.html + "<script src='qunit.js'></script>",
                     templatedir : moduledir,
                     contents : fileInfo.contents,
                     coverage: (useCodeCoverage ? "<script src='qunit.blanket.js'></script>" : "")

@@ -16,12 +16,12 @@ define(function (require, exports) {
                     DocumentManager.getCurrentDocument().getText(),
                 fileInfo = FileProxy.getTestFileInfo(entry, contents),
                 includes = FileProxy.parseIncludes(fileInfo.contents, fileInfo.originalPath, new Date().getTime()),
-                useCodeCoverage = false,
+                useCodeCoverage = includes.codeCoverage,
                 data = {
                     filename : entry.name,
                     jasmineTest : "jasmine-test",
                     title : 'Jasmine test - ' + entry.name,
-                    includes : includes,
+                    includes : includes.html,
                     contents : DocumentManager.getCurrentDocument().getText(),
                     coverage : useCodeCoverage ? "<script src='jasmine.blanket.js'></script>" : ""
                 },

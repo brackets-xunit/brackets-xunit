@@ -16,12 +16,12 @@ define(function (require, exports, module) {
                     DocumentManager.getCurrentDocument().getText(),
                 fileInfo = FileProxy.getTestFileInfo(entry, contents),
                 includes = FileProxy.parseIncludes(fileInfo.contents, fileInfo.originalPath, new Date().getTime()),
-                useCodeCoverage = true,
+                useCodeCoverage = includes.codeCoverage,
                 data = {
                     filename : entry.name,
                     title : 'YUI test - ' + entry.name,
                     templatedir : moduledir,
-                    includes : includes,
+                    includes : includes.html,
                     contents : contents
                 };
             

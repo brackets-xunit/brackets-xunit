@@ -16,7 +16,7 @@ describe("test readConfig()", function () {
     });
     
     it("Broken", function () {
-        expect(true).toEqual(false);
+        expect(false).toEqual(false);
     });
     
 
