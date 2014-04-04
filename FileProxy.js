@@ -53,7 +53,7 @@ define(function (require, exports) {
                     if(data) {
                         contents = Mustache.render(contents, data);
                     }
-                    return FileUtils.writeText(writeFile, contents);
+                    return FileUtils.writeText(writeFile, contents, true);
                 }).done(function() {
                     dfd.resolve(contents);
                 });
@@ -63,7 +63,7 @@ define(function (require, exports) {
         },
         saveText = function (inputText, writePath) {
             var writeFile = FileSystem.getFileForPath(writePath);
-            return FileUtils.writeText(writeFile, inputText);
+            return FileUtils.writeText(writeFile, inputText, true);
         },
         getTestFileInfo = function (entry, contents) {
             var fileName = this.getFileName(entry.fullPath),
