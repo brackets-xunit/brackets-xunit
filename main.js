@@ -167,12 +167,12 @@ define(function (require, exports, module) {
 
                 if (isFolder) {
                     FileSystem.resolve(
-                        suggestedName,
+                        basedir + suggestedName,
                         callback
                     );
                 } else {
                     FileSystem.resolve(
-                        suggestedName,
+                        basedir + suggestedName,
                         callback
                     );
                 }
@@ -208,7 +208,7 @@ define(function (require, exports, module) {
             test += '/*global describe, it, expect';
             break;
         case "qunit":
-            test += '/*global test, ok';
+            test += '/*global test, ok, equal';
             break;
         case "yui":
             test += '/*global YUI';
@@ -316,7 +316,7 @@ define(function (require, exports, module) {
                 test += '    "use strict";\n';
                 test += '    var ' + fparamstr + ';\n';
             }
-            test += '    ok' + '(' + functions[i].name + '(' + fparamstr + ') === "?", "' + functions[i].name + '(' + fparamstr + ') === ?");\n';
+            test += '    equal' + '(' + functions[i].name + '(' + fparamstr + '), "???", "' + functions[i].name + '(' + fparamstr + ') equals ???");\n';
             test += '});\n';
         }
         createNewFile(fullpath, test, ".qunit");

@@ -1,20 +1,14 @@
 /* brackets-xunit: qunit */
+/*brackets-xunit: includes=qunit_test_js.js* */
 
 test( "My First Test", function() {
-    ok( 1 == "1", "Warm and fuzzies" );
+    equal( greeting("Adam"), "Hello person called Adam", "Warm and fuzzies" );
 });
 
 test( "My Second Test", function() {
-    ok( 2 == "2", "Still warm" );
+    equal( greeting("Bob"), "Hello Error", "Ooops" );
 });
 
-test( "My Third Test", function() {
-    ok( 3 == "3", "Still fuzzy" );
-});
-
-test( "My Third Test", function() {
-    ok( 4 == "3", "Still fuzzy" );
-});
 
 
 
