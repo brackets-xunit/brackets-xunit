@@ -97,15 +97,23 @@ define(function (require, exports) {
                     var includeFile = includedata[i],
                         codeCoverage = '',
                         cacheBuster = cache ? '?u=' + cache : '',
-                        file;
+                        isLocal = (includeFile.indexOf("//") === -1),
+                        file = {},
+                        path = "";
                     if (includeFile[includeFile.length - 1] === "*") {
                         includeFile = includeFile.substring(0, includeFile.length - 1);
                         codeCoverage = ' data-cover';
                         results.codeCoverage = true;
                         //cacheBuster = '';
                     }
+                    if(isLocal) {
+                        path = dirPath + includeFile + cacheBuster;
+                    } else {
+                        var isProtocolAgnostic = (includeFile.indexOf("//") === 0);
+                        path = isProtocolAgnostic ? includeFile.replace("//", "http://") : includeFile;                
+                    }
                     file = { 
-                        path: dirPath + includeFile + cacheBuster,
+                        path: path,
                         coverage: codeCoverage ? true : false
                     };
                     results.files.push(file);
